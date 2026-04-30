@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block title %}Setup Required{% endblock %}
+{% block content %}
+<div class="setup-page">
+  <div style="font-size:3rem;margin-bottom:1rem">⚙️</div>
+  <h1>Run the Pipeline First</h1>
+  <p style="color:var(--muted);margin-top:.75rem;line-height:1.7">The ML model or dataset hasn't been generated yet. Run this one command:</p>
+  <pre>cd churnshield_flask
+pip install -r requirements.txt
+python run_pipeline.py</pre>
+  <p style="color:var(--muted);margin-top:1.5rem;font-size:.85rem">This will generate the dataset, run EDA, train all models, and save the best one. Then restart Flask.</p>
+</div>
+{% endblock %}

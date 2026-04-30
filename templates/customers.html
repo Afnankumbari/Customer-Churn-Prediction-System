@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+{% block title %}Customer Data{% endblock %}
+
+{% block content %}
+<div class="hero" style="padding:3rem 2rem 2.5rem">
+  <div class="hero-inner">
+    <div class="hero-tag">Customer Database</div>
+    <h1 class="hero-title" style="font-size:2.4rem">Browse the <em>dataset</em></h1>
+    <p class="hero-sub">Paginated from Flask /api/customers — real Pandas DataFrame served as JSON.</p>
+  </div>
+</div>
+
+<div class="content">
+  <div class="filter-bar">
+    <select class="filter-sel" id="filter-churn" onchange="loadCustomers(1)">
+      <option value="">All Customers</option>
+      <option value="1">Churned Only</option>
+      <option value="0">Retained Only</option>
+    </select>
+    <select class="filter-sel" id="filter-contract" onchange="loadCustomers(1)">
+      <option value="">All Contracts</option>
+      <option>Month-to-month</option>
+      <option>One year</option>
+      <option>Two year</option>
+    </select>
+    <select class="filter-sel" id="filter-internet" onchange="loadCustomers(1)">
+      <option value="">All Internet</option>
+      <option>Fiber optic</option>
+      <option>DSL</option>
+      <option>No</option>
+    </select>
+    <input class="filter-search" type="text" id="filter-search" placeholder="Search Customer ID…" oninput="loadCustomers(1)"/>
+    <span class="row-count" id="row-count">Loading…</span>
+    <a href="/api/customers?per_page=5000" download="customers.csv">
+      <button class="btn-sm">⬇ Export CSV</button>
+    </a>
+  </div>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Customer ID</th>
+          <th>Contract</th>
+          <th>Internet</th>
+          <th>Tenure</th>
+          <th>Monthly $</th>
+          <th>Total $</th>
+          <th>Complaints</th>
+          <th>Churn</th>
+        </tr>
+      </thead>
+      <tbody id="table-body">
+        <tr><td colspan="8" style="text-align:center;color:var(--muted);padding:2rem">Loading data from Python backend…</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="pagination" id="pagination"></div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+  document.addEventListener('DOMContentLoaded', () => loadCustomers(1));
+</script>
+{% endblock %}

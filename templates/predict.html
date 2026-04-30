@@ -1,0 +1,206 @@
+{% extends "base.html" %}
+{% block title %}Predict Churn{% endblock %}
+
+{% block head %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+{% endblock %}
+
+{% block content %}
+<div class="hero" style="padding:3rem 2rem 2.5rem">
+  <div class="hero-inner">
+    <div class="hero-tag">Real-Time ML Inference</div>
+    <h1 class="hero-title" style="font-size:2.4rem">Customer Churn <em>Predictor</em></h1>
+    <p class="hero-sub">Form → Flask API → sklearn Pipeline → Prediction. All Python under the hood.</p>
+  </div>
+</div>
+
+<div class="content">
+  <div class="pred-wrap">
+
+    <!-- FORM (left) -->
+    <div class="form-card">
+      <div style="font-family:var(--font-display);font-size:1.2rem;margin-bottom:1.5rem;color:var(--ink)">
+        Customer Profile
+      </div>
+
+      <!-- Demographics -->
+      <div class="form-section">
+        <div class="form-section-title">Demographics</div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Gender</label>
+            <select id="f-gender"><option>Male</option><option>Female</option></select>
+          </div>
+          <div class="form-group">
+            <label>Senior Citizen</label>
+            <select id="f-senior"><option value="0">No</option><option value="1">Yes</option></select>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Partner</label>
+            <select id="f-partner"><option>No</option><option>Yes</option></select>
+          </div>
+          <div class="form-group">
+            <label>Dependents</label>
+            <select id="f-dependents"><option>No</option><option>Yes</option></select>
+          </div>
+        </div>
+        <div class="form-group range-group">
+          <label>Age — <span id="age-v">35</span></label>
+          <input type="range" id="f-age" min="18" max="75" value="35" data-display="age-v">
+        </div>
+        <div class="form-group range-group">
+          <label>Tenure (months) — <span id="ten-v">24</span></label>
+          <input type="range" id="f-tenure" min="1" max="72" value="24" data-display="ten-v">
+        </div>
+      </div>
+
+      <!-- Services -->
+      <div class="form-section">
+        <div class="form-section-title">Services</div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Phone Service</label>
+            <select id="f-phone"><option>Yes</option><option>No</option></select>
+          </div>
+          <div class="form-group">
+            <label>Multiple Lines</label>
+            <select id="f-lines"><option>No</option><option>Yes</option><option>No phone service</option></select>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Internet Service</label>
+          <select id="f-internet"><option>Fiber optic</option><option>DSL</option><option>No</option></select>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Online Security</label>
+            <select id="f-security"><option>No</option><option>Yes</option><option>No internet service</option></select>
+          </div>
+          <div class="form-group">
+            <label>Online Backup</label>
+            <select id="f-backup"><option>No</option><option>Yes</option><option>No internet service</option></select>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Device Protection</label>
+            <select id="f-device"><option>No</option><option>Yes</option><option>No internet service</option></select>
+          </div>
+          <div class="form-group">
+            <label>Tech Support</label>
+            <select id="f-techsupport"><option>No</option><option>Yes</option><option>No internet service</option></select>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Streaming TV</label>
+            <select id="f-tv"><option>No</option><option>Yes</option><option>No internet service</option></select>
+          </div>
+          <div class="form-group">
+            <label>Streaming Movies</label>
+            <select id="f-movies"><option>No</option><option>Yes</option><option>No internet service</option></select>
+          </div>
+        </div>
+      </div>
+
+      <!-- Billing -->
+      <div class="form-section">
+        <div class="form-section-title">Billing</div>
+        <div class="form-group">
+          <label>Contract Type</label>
+          <select id="f-contract"><option>Month-to-month</option><option>One year</option><option>Two year</option></select>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Paperless Billing</label>
+            <select id="f-paperless"><option>Yes</option><option>No</option></select>
+          </div>
+          <div class="form-group">
+            <label>Payment Method</label>
+            <select id="f-payment">
+              <option>Electronic check</option><option>Mailed check</option>
+              <option>Bank transfer</option><option>Credit card</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group range-group">
+          <label>Monthly Charges — <span id="mon-v">$75</span></label>
+          <input type="range" id="f-monthly" min="18" max="120" value="75" data-display="mon-v" data-prefix="$">
+        </div>
+        <div class="form-group">
+          <label>Total Charges ($)</label>
+          <input type="number" id="f-total" value="1800" min="0" max="9000" step="50"/>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label># Complaints</label>
+            <input type="number" id="f-complaints" value="0" min="0" max="10"/>
+          </div>
+          <div class="form-group">
+            <label># Support Calls</label>
+            <input type="number" id="f-calls" value="1" min="0" max="20"/>
+          </div>
+        </div>
+      </div>
+
+      <button class="btn-predict" id="predict-btn">⚡ Predict Churn Probability</button>
+
+      <div style="margin-top:1rem;padding:0.85rem;background:var(--paper);border-radius:var(--r-sm);font-size:.75rem;color:var(--muted);line-height:1.6">
+        🐍 <strong>How it works:</strong> This form POSTs JSON to <code style="font-family:var(--font-mono)">/api/predict</code>. Flask passes it through your trained <strong>sklearn Pipeline</strong> (preprocess → model) and returns the probability.
+      </div>
+    </div>
+
+    <!-- RESULTS (right) -->
+    <div class="result-col">
+
+      <!-- Result hero -->
+      <div class="result-hero idle" id="result-hero">
+        <span class="result-icon" id="result-icon">🛡️</span>
+        <div class="result-pct idle" id="result-pct">—</div>
+        <div class="result-badge idle" id="result-badge">AWAITING PREDICTION</div>
+        <div class="result-sub" id="result-sub">Fill in the customer profile on the left and click Predict.</div>
+        <div style="margin-top:0.75rem;font-size:.75rem;color:var(--muted)" id="model-info">
+          {% if model %}{{ model.name }} · AUC {{ model.auc }}{% endif %}
+        </div>
+      </div>
+
+      <!-- Gauge -->
+      <div class="gauge-bar-wrap">
+        <div class="card-title">Probability Gauge</div>
+        <div class="gauge-labels"><span>0% — Safe</span><span>50% — Threshold</span><span>100% — Critical</span></div>
+        <div class="gauge-track">
+          <div class="gauge-fill" id="gauge-fill"></div>
+          <div class="gauge-thumb" id="gauge-thumb" style="left:0%"></div>
+          <div class="gauge-mid"><div class="gauge-mid-lbl">50%</div></div>
+        </div>
+        <div class="gauge-footer">
+          <span>Churn Probability</span>
+          <strong id="gauge-score" style="font-family:var(--font-mono)">—</strong>
+        </div>
+      </div>
+
+      <!-- Risk Factors -->
+      <div class="card">
+        <div class="card-title">Risk Factor Breakdown</div>
+        <div class="risk-grid" id="risk-grid">
+          <div class="risk-item safe" style="grid-column:1/-1">
+            <div class="risk-dot safe"></div>
+            <span>Run a prediction to see individual risk factors from the Python model</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Insights -->
+      <div class="card">
+        <div class="card-title">Key Business Insights</div>
+        <div class="insight danger"><strong>Month-to-month contracts</strong> churn at 38% — 7× higher than two-year customers.</div>
+        <div class="insight info"><strong>Electronic check</strong> payment is the highest-risk method at 28% churn rate.</div>
+        <div class="insight good"><strong>Tenure &gt; 36 months</strong> significantly reduces churn across all contract types.</div>
+      </div>
+
+    </div><!-- /result-col -->
+  </div><!-- /pred-wrap -->
+</div>
+{% endblock %}

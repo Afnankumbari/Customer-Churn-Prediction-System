@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>{% block title %}ChurnShield{% endblock %} — Customer Intelligence</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700;800&family=DM+Mono:wght@400;500&family=Playfair+Display:ital,wght@0,700;1,700&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}"/>
+{% block head %}{% endblock %}
+</head>
+<body>
+
+<!-- NAVIGATION -->
+<nav class="nav" id="nav">
+  <div class="nav-inner">
+    <a href="/" class="nav-brand">
+      <div class="nav-logo"><span>🛡</span></div>
+      <span class="nav-brand-text">Churn<strong>Shield</strong></span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="/"          class="nav-link {% if request.path == '/' %}active{% endif %}">Dashboard</a></li>
+      <li><a href="/predict"   class="nav-link {% if request.path == '/predict' %}active{% endif %}">Predict</a></li>
+      <li><a href="/eda"       class="nav-link {% if request.path == '/eda' %}active{% endif %}">Analysis</a></li>
+      <li><a href="/models"    class="nav-link {% if request.path == '/models' %}active{% endif %}">Models</a></li>
+      <li><a href="/customers" class="nav-link {% if request.path == '/customers' %}active{% endif %}">Customers</a></li>
+    </ul>
+    <div class="nav-right">
+      <span class="nav-status"><span class="status-dot"></span>Model Live</span>
+    </div>
+  </div>
+</nav>
+
+<!-- PAGE CONTENT -->
+<main class="main-content">
+  {% block content %}{% endblock %}
+</main>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="footer-inner">
+    <span>🛡️ ChurnShield — Python + Flask + Sklearn + HTML/CSS</span>
+    <span>Built for Data Science Portfolio</span>
+  </div>
+</footer>
+
+<script src="{{ url_for('static', filename='js/main.js') }}"></script>
+{% block scripts %}{% endblock %}
+</body>
+</html>

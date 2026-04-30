@@ -1,0 +1,107 @@
+{% extends "base.html" %}
+{% block title %}Model Performance{% endblock %}
+
+{% block content %}
+<div class="hero" style="padding:3rem 2rem 2.5rem">
+  <div class="hero-inner">
+    <div class="hero-tag">ML Model Evaluation</div>
+    <h1 class="hero-title" style="font-size:2.4rem">Four models, one <em>winner</em></h1>
+    <p class="hero-sub">Trained with sklearn, evaluated on 20% stratified hold-out. Best saved as pickle.</p>
+  </div>
+</div>
+
+<div class="content">
+
+  <div class="section-head"><h2>Model Comparison</h2><span>Ranked by Test ROC-AUC</span></div>
+
+  <div class="model-grid" style="margin-bottom:1.5rem">
+    <div class="model-card best">
+      <div class="model-badge-pill">🏆 Best Model</div>
+      <div class="model-name" style="color:#fff">Logistic Regression</div>
+      <div class="model-stat"><span class="model-stat-k">Test AUC</span><span class="model-stat-v">0.775</span></div>
+      <div class="model-stat"><span class="model-stat-k">Accuracy</span><span class="model-stat-v">67.1%</span></div>
+      <div class="model-stat"><span class="model-stat-k">F1 Score</span><span class="model-stat-v">0.540</span></div>
+      <div class="model-stat"><span class="model-stat-k">CV AUC (5-fold)</span><span class="model-stat-v">0.760</span></div>
+      <div class="model-bar-bg"><div class="model-bar" style="width:77.5%"></div></div>
+    </div>
+    <div class="model-card">
+      <div class="model-name">Random Forest</div>
+      <div class="model-stat"><span class="model-stat-k">Test AUC</span><span class="model-stat-v">0.772</span></div>
+      <div class="model-stat"><span class="model-stat-k">Accuracy</span><span class="model-stat-v">68.6%</span></div>
+      <div class="model-stat"><span class="model-stat-k">F1 Score</span><span class="model-stat-v">0.540</span></div>
+      <div class="model-stat"><span class="model-stat-k">CV AUC (5-fold)</span><span class="model-stat-v">0.747</span></div>
+      <div class="model-bar-bg"><div class="model-bar" style="width:77.2%"></div></div>
+    </div>
+    <div class="model-card">
+      <div class="model-name">Gradient Boosting</div>
+      <div class="model-stat"><span class="model-stat-k">Test AUC</span><span class="model-stat-v">0.761</span></div>
+      <div class="model-stat"><span class="model-stat-k">Accuracy</span><span class="model-stat-v">75.3%</span></div>
+      <div class="model-stat"><span class="model-stat-k">F1 Score</span><span class="model-stat-v">0.316</span></div>
+      <div class="model-stat"><span class="model-stat-k">CV AUC (5-fold)</span><span class="model-stat-v">0.727</span></div>
+      <div class="model-bar-bg"><div class="model-bar" style="width:76.1%"></div></div>
+    </div>
+    <div class="model-card">
+      <div class="model-name">SVM (RBF Kernel)</div>
+      <div class="model-stat"><span class="model-stat-k">Test AUC</span><span class="model-stat-v">0.750</span></div>
+      <div class="model-stat"><span class="model-stat-k">Accuracy</span><span class="model-stat-v">65.2%</span></div>
+      <div class="model-stat"><span class="model-stat-k">F1 Score</span><span class="model-stat-v">0.531</span></div>
+      <div class="model-stat"><span class="model-stat-k">CV AUC (5-fold)</span><span class="model-stat-v">0.728</span></div>
+      <div class="model-bar-bg"><div class="model-bar" style="width:75%"></div></div>
+    </div>
+  </div>
+
+  <!-- Chart.js AUC + Feature Importance -->
+  <div class="grid-2" style="margin-bottom:1.5rem">
+    <div class="card"><div class="card-title">AUC Comparison</div><canvas id="chart-auc"></canvas></div>
+    <div class="card"><div class="card-title">Top Feature Importances (|Coefficients|)</div><canvas id="chart-features"></canvas></div>
+  </div>
+
+  <!-- Python-generated plots -->
+  <div class="section-head"><h2>Python-Generated Evaluation Plots</h2><span>From src/train.py via matplotlib</span></div>
+  <div class="grid-2" style="margin-bottom:1.5rem">
+    <div class="card" style="padding:1rem">
+      <div class="card-title">ROC Curves — All Models</div>
+      <img src="/assets/08_roc_curves.png" class="eda-img" alt="ROC Curves" onerror="this.parentElement.style.display='none'"/>
+    </div>
+    <div class="card" style="padding:1rem">
+      <div class="card-title">Model Comparison</div>
+      <img src="/assets/07_model_comparison.png" class="eda-img" alt="Model Comparison" onerror="this.parentElement.style.display='none'"/>
+    </div>
+  </div>
+  <div class="grid-2">
+    <div class="card" style="padding:1rem">
+      <div class="card-title">Confusion Matrix (Best Model)</div>
+      <img src="/assets/09_confusion_matrix.png" class="eda-img" alt="Confusion Matrix" onerror="this.parentElement.style.display='none'"/>
+    </div>
+    <div class="card" style="padding:1rem">
+      <div class="card-title">Feature Importance</div>
+      <img src="/assets/10_feature_importance.png" class="eda-img" alt="Feature Importance" onerror="this.parentElement.style.display='none'"/>
+    </div>
+  </div>
+
+  <!-- Pipeline explanation -->
+  <div class="card" style="margin-top:1.5rem">
+    <div class="card-title">sklearn Pipeline Architecture</div>
+    <div class="grid-3" style="font-size:.84rem;margin-top:0">
+      <div style="padding:1rem;background:var(--paper);border-radius:var(--r);border:1px solid var(--border)">
+        <div style="font-weight:700;margin-bottom:6px">1. Preprocessing</div>
+        <div style="color:var(--muted)">Missing values imputed (median for numeric, mode for categorical). StandardScaler for numeric, OneHotEncoder for categorical via ColumnTransformer.</div>
+      </div>
+      <div style="padding:1rem;background:var(--paper);border-radius:var(--r);border:1px solid var(--border)">
+        <div style="font-weight:700;margin-bottom:6px">2. Feature Engineering</div>
+        <div style="color:var(--muted)">3 derived features added: <code style="font-family:var(--font-mono);font-size:.8rem">ChargePerTenure</code>, <code style="font-family:var(--font-mono);font-size:.8rem">ServiceCount</code>, <code style="font-family:var(--font-mono);font-size:.8rem">IsLongTerm</code> (tenure ≥ 24 mo).</div>
+      </div>
+      <div style="padding:1rem;background:var(--paper);border-radius:var(--r);border:1px solid var(--border)">
+        <div style="font-weight:700;margin-bottom:6px">3. Model Selection</div>
+        <div style="color:var(--muted)">5-fold stratified CV + hold-out test. Best model by Test ROC-AUC pickled to <code style="font-family:var(--font-mono);font-size:.8rem">models/best_model.pkl</code>.</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<script>document.addEventListener('DOMContentLoaded', initModelCharts);</script>
+{% endblock %}
