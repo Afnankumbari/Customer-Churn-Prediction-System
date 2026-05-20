@@ -1,147 +1,361 @@
-# 🛡️ ChurnShield — Python + Flask + HTML/CSS
+# 🛡️ ChurnShield — Customer Churn Prediction System
 
-> **Production-ready** Customer Churn Prediction  
-> Python backend · Flask API · Sklearn ML · Beautiful HTML/CSS frontend
+> End-to-end Machine Learning web application for predicting telecom customer churn using Flask and Scikit-learn.
+
+> Python • Flask • Machine Learning • HTML/CSS/JS • Chart.js
 
 ---
 
-## 🏗️ Architecture
+# 📌 Overview
 
-```
-Browser (HTML/CSS/JS)
-        ↕  HTTP
-Flask Server (app.py)
-        ↕  Python
-sklearn Pipeline (models/best_model.pkl)
-        ↕  Pandas
-customers.csv / SQLite DB
+Customer churn is a major challenge in the telecom industry. Losing customers affects revenue and long-term business growth.
+
+This project predicts **customer churn probability** using Machine Learning and provides:
+
+- Real-time churn prediction
+- Interactive dashboard
+- Customer data analysis
+- Customer database browser
+- Filtering & pagination
+- Business insights visualization
+
+---
+
+# 🚀 Features
+
+✅ Customer churn prediction
+
+✅ Dashboard with KPIs
+
+✅ Exploratory Data Analysis (EDA)
+
+✅ Customer dataset browser
+
+✅ Filtering & searching
+
+✅ CSV export
+
+✅ Pagination
+
+✅ Flask REST APIs
+
+✅ Interactive charts using Chart.js
+
+---
+
+# 🏗 Architecture
+
+```text
+User Input (Frontend)
+
+        ↓
+
+HTML + CSS + JavaScript
+
+        ↓
+
+Flask Backend (app.py)
+
+        ↓
+
+Preprocessing Pipeline
+
+        ↓
+
+Machine Learning Model
+
+        ↓
+
+Prediction Result
+
+        ↓
+
+Dashboard / Charts / Output
 ```
 
-## 📁 Folder Structure
+---
 
-```
-churnshield_flask/
-├── app.py                  ← Flask server (routes + API endpoints)
-├── run_pipeline.py         ← One-shot: generate data → EDA → train model
-├── requirements.txt
-├── README.md
-├── Dockerfile
+# 📁 Folder Structure
+
+```bash
+Customer-Churn-Prediction-System/
+
 │
-├── src/
-│   ├── generate_data.py    ← Creates 5,000-row telecom dataset
-│   ├── preprocess.py       ← Feature engineering + sklearn pipelines
-│   ├── eda.py              ← Generates matplotlib plots
-│   └── train.py            ← Trains & compares 4 ML models
+├── app.py
 │
-├── templates/              ← Jinja2 HTML templates (Flask)
-│   ├── base.html           ← Nav, footer, shared layout
-│   ├── index.html          ← Dashboard homepage
-│   ├── predict.html        ← Prediction form + results
-│   ├── eda.html            ← EDA charts + matplotlib plots
-│   ├── models.html         ← Model comparison page
-│   ├── customers.html      ← Filterable data table
-│   └── setup.html          ← Shown if pipeline not run yet
+├── templates/
+│     ├── base.html
+│     ├── dashboard.html
+│     ├── predict.html
+│     ├── analysis.html
+│     └── customers.html
 │
 ├── static/
-│   ├── css/main.css        ← All styles (no framework)
-│   └── js/main.js          ← Chart.js + fetch API calls
-│
-├── data/
-│   ├── customers.csv
-│   ├── schema.sql
-│   └── inserts.sql
+│     ├── css/
+│     │      └── style.css
+│     │
+│     ├── js/
+│     │      ├── dashboard.js
+│     │      ├── predict.js
+│     │      ├── analysis.js
+│     │      └── customers.js
 │
 ├── models/
-│   └── best_model.pkl      ← sklearn Pipeline (pickle)
+│     └── best_model.pkl
 │
-└── assets/                 ← 10 matplotlib PNG plots
+├── data/
+│     └── customers.csv
+│
+├── notebooks/
+│
+├── requirements.txt
+│
+└── README.md
 ```
 
-## ⚡ Quick Start
+---
 
-```bash
-# 1. Install dependencies
-pip install -r requirements.txt
+# 🤖 Machine Learning Pipeline
 
-# 2. Generate data, run EDA, train models
-python run_pipeline.py
+Dataset
 
-# 3. Start Flask server
-python app.py
+↓
 
-# 4. Open browser
-#    http://127.0.0.1:5000
+Data Cleaning
+
+↓
+
+Encoding
+
+↓
+
+Feature Scaling
+
+↓
+
+Feature Engineering
+
+↓
+
+Model Training
+
+↓
+
+Evaluation
+
+↓
+
+Best Model Selection
+
+↓
+
+Deployment
+
+---
+
+# 📊 Dataset Information
+
+Dataset contains:
+
+- Customer ID
+- Contract Type
+- Internet Service
+- Monthly Charges
+- Total Charges
+- Tenure
+- Payment Method
+- Complaints
+- Support Calls
+- Churn Status
+
+Records:
+
+```text
+5000+ telecom customers
 ```
 
-## 🌐 API Endpoints
+---
 
-| Method | Route | Description |
-|--------|-------|-------------|
-| GET | `/` | Dashboard homepage |
-| GET | `/predict` | Prediction form |
-| **POST** | `/api/predict` | **JSON prediction endpoint** |
-| GET | `/eda` | EDA analysis page |
-| GET | `/models` | Model performance page |
-| GET | `/customers` | Customer data table |
-| GET | `/api/customers` | JSON customer data (filterable) |
-| GET | `/api/stats` | JSON dataset statistics |
+# 📈 Model Performance
 
-### POST /api/predict — Example
+Models tested:
 
-```bash
-curl -X POST http://127.0.0.1:5000/api/predict \
-  -H "Content-Type: application/json" \
-  -d '{
-    "Contract": "Month-to-month",
-    "InternetService": "Fiber optic",
-    "Tenure": 6,
-    "MonthlyCharges": 85,
-    "TotalCharges": 510,
-    "PaymentMethod": "Electronic check",
-    "SeniorCitizen": 0,
-    "NumComplaints": 1,
-    "SupportCalls": 2
-  }'
+| Model | Purpose |
+|------|---------|
+| Logistic Regression | Classification |
+| Random Forest | Classification |
+| Gradient Boosting | Classification |
+| SVM | Classification |
+
+Selected model:
+
+```text
+Logistic Regression
 ```
 
-**Response:**
+Performance:
+
+```text
+Test AUC ≈ 0.775
+```
+
+---
+
+# 🌐 API Endpoints
+
+| Method | Endpoint | Description |
+|--------|-----------|-------------|
+| GET | / | Dashboard |
+| GET | /predict | Prediction page |
+| POST | /api/predict | Predict churn |
+| GET | /analysis | EDA page |
+| GET | /customers | Customer table |
+| GET | /api/customers | Customer JSON |
+| GET | /api/stats | Dashboard stats |
+
+---
+
+## Example Request
+
+POST:
+
 ```json
 {
-  "probability": 0.7823,
-  "probability_pct": 78.2,
-  "prediction": 1,
-  "risk_level": "HIGH",
-  "model_name": "Logistic Regression",
-  "model_auc": 0.775,
-  "risk_factors": [...]
+"Contract":"Month-to-month",
+"MonthlyCharges":85,
+"Tenure":6,
+"InternetService":"Fiber optic"
 }
 ```
 
-## 🚀 Deployment
+Response:
 
-### Local
+```json
+{
+"prediction":"High Risk",
+"probability":78.2
+}
+```
+
+---
+
+# ⚙ Technologies Used
+
+Backend:
+
+- Python
+- Flask
+
+Machine Learning:
+
+- Scikit-learn
+- Logistic Regression
+- Random Forest
+- Gradient Boosting
+- SVM
+
+Data Processing:
+
+- Pandas
+- NumPy
+
+Visualization:
+
+- Matplotlib
+- Seaborn
+- Chart.js
+
+Frontend:
+
+- HTML
+- CSS
+- JavaScript
+
+---
+
+# 🖥 Screenshots
+
+Add:
+
+### Dashboard
+
+Insert image
+
+### Prediction Page
+
+Insert image
+
+### Analysis Page
+
+Insert image
+
+### Customer Database
+
+Insert image
+
+---
+
+# 🚀 Installation
+
+Clone repo:
+
+```bash
+git clone https://github.com/Afnankumbari/Customer-Churn-Prediction-System.git
+```
+
+Move:
+
+```bash
+cd Customer-Churn-Prediction-System
+```
+
+Install:
+
+```bash
+pip install -r requirements.txt
+```
+
+Run:
+
 ```bash
 python app.py
 ```
 
-### Docker
-```bash
-docker build -t churnshield .
-docker run -p 5000:5000 churnshield
-# → http://localhost:5000
+Open:
+
+```text
+http://127.0.0.1:5000
 ```
 
-### AWS EC2
-```bash
-pip install -r requirements.txt
-python run_pipeline.py
-gunicorn -w 4 -b 0.0.0.0:5000 app:app
-```
+---
 
-### Render / Railway (Free)
-- Push to GitHub
-- Set build command: `pip install -r requirements.txt && python run_pipeline.py`
-- Set start command: `python app.py`
+# 🔥 Future Enhancements
 
-## 📄 License
-MIT © 2024 ChurnShield
+- Cloud deployment
+- Authentication system
+- CRM integration
+- Mobile support
+- Real-time customer data
+- Advanced ML models
+
+---
+
+# 👨‍💻 Author
+
+## Mohammad Afnan Kumbari
+
+Computer Science Engineering
+
+Machine Learning • Data Science • Full Stack Development
+
+GitHub:
+
+https://github.com/Afnankumbari
+
+---
+
+# ⭐ Support
+
+If you found this useful:
+
+Give ⭐ to repository
