@@ -273,26 +273,6 @@ Frontend:
 
 ---
 
-# 🖥 Screenshots
-
-Add:
-
-### Dashboard
-
-Insert image
-
-### Prediction Page
-
-Insert image
-
-### Analysis Page
-
-Insert image
-
-### Customer Database
-
-Insert image
-
 ---
 
 # 🚀 Installation
