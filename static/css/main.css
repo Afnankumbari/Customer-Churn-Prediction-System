@@ -363,6 +363,53 @@ tr:hover td { background: #fafbff; }
 /* ── CHART CANVAS ────────────────────────────────────────────── */
 canvas { max-height: 280px; }
 
+.badge-green {
+  background: rgba(0,200,150,0.1);
+  color: #00b894;
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 12px;
+}
+
+.badge-red {
+  background: rgba(255,0,0,0.1);
+  color: #e63946;
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 12px;
+}
+
+.pagination {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.pagination button {
+  padding: 6px 10px;
+  border-radius: 8px;
+  border: none;
+  background: #eee;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.pagination button:hover {
+  background: #ddd;
+}
+
+.pagination .active-page {
+  background: black;
+  color: white;
+}
+
+.pagination span {
+  padding: 0 6px;
+  color: #888;
+}
+
 /* ── EDA IMG GRID ────────────────────────────────────────────── */
 .eda-img { width: 100%; border-radius: var(--r); border: 1px solid var(--border); }
 

@@ -42,16 +42,30 @@
   </div>
 
   <div class="grid-2" style="margin-bottom:1.5rem">
-    <div class="card" style="display:grid;grid-template-columns:180px 1fr;gap:1.5rem;align-items:center">
+<div class="card" style="text-align:center">
+  <div class="card-title">Overall Churn Distribution</div>
+
+  <canvas id="chart-donut" style="max-height:200px"></canvas>
+
+  <div style="margin-top:1rem">
+    <div style="font-size:2rem;color:var(--red);font-weight:700">
+      {{ stats.churn_rate }}%
+    </div>
+    <div style="font-size:.8rem;color:var(--muted)">
+      Churn Rate
+    </div>
+  </div>
+</div>
       <canvas id="chart-donut" style="max-height:180px"></canvas>
-      <div>
+      <!-- <div>
         <div class="card-title">Overall Split</div>
         <div style="font-family:var(--font-display);font-size:2.5rem;color:var(--red)">{{ stats.churn_rate }}%</div>
         <div style="font-size:.8rem;color:var(--muted);margin-top:4px;text-transform:uppercase;letter-spacing:.06em">Churn Rate</div>
         <div style="margin-top:1rem;font-size:.82rem;color:var(--muted);line-height:1.6">
           {{ "{:,}".format(stats.retained) }} customers retained · {{ "{:,}".format(stats.churned) }} churned
-        </div>
-      </div>
+        </div> 
+      </div> 
+    --> 
     </div>
     <div class="card">
       <div class="card-title">Retained vs Churned — Avg Metrics</div>
@@ -93,3 +107,4 @@
   document.addEventListener('DOMContentLoaded', () => initEDACharts(stats));
 </script>
 {% endblock %}
+ 

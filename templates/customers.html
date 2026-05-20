@@ -62,6 +62,74 @@
 
 {% block scripts %}
 <script>
-  document.addEventListener('DOMContentLoaded', () => loadCustomers(1));
+  
+async function loadCustomers(page = 1) {
+  const churn = document.getElementById("filter-churn").value;
+  const contract = document.getElementById("filter-contract").value;
+  const internet = document.getElementById("filter-internet").value;
+  const search = document.getElementById("filter-search").value;
+
+  const url = `/api/customers?page=${page}&churn=${churn}&contract=${contract}&internet=${internet}&search=${search}`;
+
+  const res = await fetch(url);
+  const data = await res.json();
+
+  const tbody = document.getElementById("table-body");
+  tbody.innerHTML = "";
+
+  data.records.forEach(c => {
+    tbody.innerHTML += `
+      <tr>
+        <td>${c.CustomerID}</td>
+        <td>${c.Contract}</td>
+        <td>${c.InternetService}</td>
+        <td>${c.Tenure} mo</td>
+        <td>$${c.MonthlyCharges}</td>
+        <td>$${c.TotalCharges}</td>
+        <td>${c.NumComplaints}</td>
+        <td>
+          <span class="${c.Churn ? 'badge-red' : 'badge-green'}">
+           ●${c.Churn ? 'Churned' : 'Retained'}
+          </span>
+        </td>
+      </tr>
+    `;
+  });
+
+  // row count
+  document.getElementById("row-count").innerText =
+    `Showing ${data.records.length} of ${data.total} customers`;
+
+  // pagination
+ const pagination = document.getElementById("pagination");
+pagination.innerHTML = "";
+
+let start = Math.max(1, page - 2);
+let end = Math.min(data.total_pages, page + 2);
+
+// First page
+if (start > 1) {
+  pagination.innerHTML += `<button onclick="loadCustomers(1)">1</button>`;
+  if (start > 2) pagination.innerHTML += `<span>...</span>`;
+}
+
+// Middle pages
+for (let i = start; i <= end; i++) {
+  pagination.innerHTML += `
+    <button onclick="loadCustomers(${i})"
+      class="${i === page ? 'active-page' : ''}">
+      ${i}
+    </button>
+  `;
+}
+
+// Last page
+if (end < data.total_pages) {
+  if (end < data.total_pages - 1) pagination.innerHTML += `<span>...</span>`;
+  pagination.innerHTML += `<button onclick="loadCustomers(${data.total_pages})">${data.total_pages}</button>`;
+}   
+}
+
+document.addEventListener("DOMContentLoaded", () => loadCustomers(1));
 </script>
 {% endblock %}

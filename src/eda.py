@@ -54,30 +54,40 @@ def run_eda(df: pd.DataFrame, out_dir: str):
 
 
 def _plot_churn_distribution(df, out_dir):
-    fig, axes = plt.subplots(1, 2, figsize=(12, 4))
-    fig.patch.set_facecolor(BG)
-
     counts = df["Churn"].value_counts()
     colors = [PALETTE["retained"], PALETTE["churned"]]
-    axes[0].pie(counts, labels=["Retained", "Churned"], colors=colors,
-                autopct="%1.1f%%", startangle=90,
-                textprops={"color": FG, "fontsize": 12},
-                wedgeprops={"edgecolor": BG, "linewidth": 2})
-    axes[0].set_title("Overall Churn Distribution", fontsize=14, fontweight="bold")
 
-    churn_labels = ["Retained", "Churned"]
-    bars = axes[1].bar(churn_labels, counts.values, color=colors,
-                       width=0.5, edgecolor=BG, linewidth=1.5)
-    for bar, v in zip(bars, counts.values):
-        axes[1].text(bar.get_x() + bar.get_width() / 2, bar.get_height() + 30,
-                     f"{v:,}", ha="center", va="bottom", fontsize=12, color=FG)
-    axes[1].set_title("Churn Count", fontsize=14, fontweight="bold")
-    axes[1].set_ylabel("Customers", fontsize=11)
-    axes[1].grid(axis="y", alpha=0.3)
-    axes[1].set_facecolor(BG)
+    fig, ax = plt.subplots(figsize=(6, 6))
+    fig.patch.set_facecolor(BG)
+
+    # Donut chart
+    wedges, _ = ax.pie(
+        counts,
+        colors=colors,
+        startangle=90,
+        wedgeprops=dict(width=0.4, edgecolor=BG)
+    )
+
+    # Center text
+    churn_rate = counts[1] / counts.sum() * 100
+    ax.text(0, 0.1, f"{churn_rate:.1f}%", ha='center', va='center',
+            fontsize=26, fontweight='bold', color=PALETTE["churned"])
+    ax.text(0, -0.1, "Churn Rate", ha='center', fontsize=12, color=FG)
+
+    # Title
+    ax.set_title("Overall Churn Distribution", fontsize=14, fontweight="bold")
+
+    # Legend
+    ax.legend(
+        wedges,
+        ["Retained", "Churned"],
+        loc="lower center",
+        bbox_to_anchor=(0.5, -0.15),
+        ncol=2
+    )
 
     plt.tight_layout()
-    plt.savefig(os.path.join(out_dir, "01_churn_distribution.png"), dpi=150, bbox_inches="tight")
+    plt.savefig(os.path.join(out_dir, "01_churn_distribution.png"), dpi=150)
     plt.close()
 
 
